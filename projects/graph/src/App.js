@@ -71,11 +71,16 @@ class GraphView extends Component {
       vertex.edges.forEach(edge => {
         const vPair = edge.destination;
         ctx.beginPath();
+          
         ctx.lineWidth = 5;
         ctx.strokeStyle = randomColor();
         ctx.moveTo(vertex.pos.x, vertex.pos.y);
         ctx.lineTo(vPair.pos.x, vPair.pos.y);
         ctx.stroke();
+        ctx.fillText(vertex.value, vertex.pos.x - 7, vertex.pos.y + 4);
+        ctx.font = "30px Comic Sans MS";
+        ctx.fillStyle = "black";
+        ctx.textAlign = "center";
       })
     })
   }
