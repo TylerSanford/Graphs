@@ -1,8 +1,14 @@
+import Queue from './queue';
+
 /**
  * Edge
  */
 export class Edge {
   // !!! IMPLEMENT ME
+  constructor(destination, weight) {
+    this.destination = destination;
+    this.weight = weight;
+  }
 }
 
 /**
@@ -10,6 +16,10 @@ export class Edge {
  */
 export class Vertex {
   // !!! IMPLEMENT ME
+  constructor() {
+    this.edges = [];
+    this.parent = null;
+  }
 }
 
 /**
@@ -26,8 +36,9 @@ export class Graph {
   randomize(width, height, pxBox, probability=0.6) {
     // Helper function to set up two-way edges
     function connectVerts(v0, v1) {
-      v0.edges.push(new Edge(v1));
-      v1.edges.push(new Edge(v0));
+      const weightRand = Math.floor(Math.random() * 10) + 1;
+      v0.edges.push(new Edge(v1, weightRand));
+      v1.edges.push(new Edge(v0, weightRand));
     }
 
     let count = 0;
@@ -111,6 +122,28 @@ export class Graph {
    */
   bfs(start) {
     // !!! IMPLEMENT ME
+    const bfsPos = [];
+    for (let i = 0; i < this.vertexes.length; i ++) {
+      this.vertexes[i].color = 'white';
+    }
+
+    start.color = 'green';
+    const queue = new Queue();
+    queue.enqueue(start)
+
+    while (!queue.isEmpty()) {
+      const u = queue.storage[0];
+      for (let k = 0; k < u.edges.length; k++) {
+        if (u.edges[k].destination.color === 'white') {
+          u.edges[k].destination.color = 'green';
+          queue.enqueue(u.edges[k].destination);
+        }
+      }
+      queue.dequeue();
+      bfsPos.push(u.pos);
+      u.color = 'green';
+    }
+    return bfsPos; 
   }
 
   /**
@@ -118,5 +151,6 @@ export class Graph {
    */
   getConnectedComponents() {
     // !!! IMPLEMENT ME
+    return this.vertexes.filter(vertex => vertex.edges.length !== 0);
   }
 }
